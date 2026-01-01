@@ -119,7 +119,9 @@ SRVC,SRCA,SERC Reliability Corporation / South,5-16,serccnt
 
 
 power_df = get_power_data()
-st.dataframe(power_df)
+#update formats 
+power_df['period'] = pd.to_datetime(power_df['period']).dt.year
+#st.dataframe(power_df)
 # -----------------------------------------------------------------------------
 # Draw the actual page
 
@@ -127,31 +129,35 @@ st.dataframe(power_df)
 '''
 # :earth_americas: 2025 Annual Energy Outlook 
 
-Browse EIA Data from the 2025 Annual Energy Outlook.
+Browse EIA Power Data from the 2025 Annual Energy Outlook.
 '''
 
 # Add some spacing
 ''
 ''
+with st.container(border=True):
+    #create date range for the slider filters
+    min_value = power_df['period'].min()
+    max_value = power_df['period'].max()
+    #create the eGridRegions list for the multiselect filter
+    eGridRegions = power_df['eGRID Subregion(s)'].unique().tolist()
 
-min_value = power_df['period'].min()
-max_value = power_df['period'].max()
-
-from_year, to_year = st.slider(
+    #Create the the slider 
+    from_year, to_year = st.slider(
     'Which years are you interested in?',
-    min_value=min_value,
-    max_value=max_value,
-    value=[min_value, max_value])
+        min_value=min_value,
+        max_value=max_value,
+        value=[min_value, max_value])
 
-eGridRegions = power_df['eGRID Subregion(s)'].unique()
 
-if not len(eGridRegions):
-    st.warning("Select at least one eGridRegion")
 
-selected_eGridRegions = st.multiselect(
-    'Which eGrid regions would you like to view?',
-    eGridRegions,
-    ['DEU', 'FRA', 'GBR', 'BRA', 'MEX', 'JPN'])
+    if not len(eGridRegions):
+        st.warning("Select at least one eGridRegion")
+
+    selected_eGridRegions = st.multiselect(
+        'Which eGrid regions would you like to view?',
+        eGridRegions,
+        ['DEU', 'FRA', 'GBR', 'BRA', 'MEX', 'JPN'])
 
 ''
 ''
@@ -159,21 +165,21 @@ selected_eGridRegions = st.multiselect(
 
 # Filter the data
 filtered_power_df = power_df[
-    (power_df['eGRID Subregion(s)'].isin(selected_eGridRegions))
-    & (power_df['period'] <= to_year)
-    & (from_year <= power_df['period'])
-]
+        (power_df['eGRID Subregion(s)'].isin(selected_eGridRegions))
+        & (power_df['period'] <= to_year)
+        & (from_year <= power_df['period'])
+    ]
 
 st.header('Power Price Projections', divider='gray')
 
 ''
 
 st.line_chart(
-    filtered_power_df,
-    x='period',
-    y='Average Value',
-    color='eGRID Subregion(s)',
-)
+        filtered_power_df,
+        x='period',
+        y='Average Value',
+        color='eGRID Subregion(s)',
+    )
 
 ''
 ''
@@ -184,27 +190,6 @@ last_year = power_df[power_df['period'] == to_year]
 
 st.header(f'Power Prices in {to_year}', divider='gray')
 
-''
-
-cols = st.columns(4)
-
-for i, eGridRegion in enumerate(selected_eGridRegions):
-    col = cols[i % len(cols)]
-
-    with col:
-        first_power = first_year[first_year['eGRID Subregion(s)'] == eGridRegion]['Average Value'].iat[0] / 1000000000
-        last_power = last_year[last_year['eGRID Subregion(s)'] == eGridRegion]['Average Value'].iat[0] / 1000000000
-
-        if math.isnan(first_power) or math.isnan(last_power):
-            growth = 'n/a'
-            delta_color = 'off'
-        else:
-            growth = f'{last_power / first_power:,.2f}x'
-            delta_color = 'normal'
-
-        st.metric(
-            label=f'{eGridRegion} Power Price',
-            value=f'{last_power:,.0f}B',
-            delta=growth,
-            delta_color=delta_color
-        )
+tab1, tab2 = st.tabs(["Chart", "Dataframe"])
+tab1.line_chart(filtered_power_df, height=250)
+tab2.dataframe(filtered_power_df, height=250, use_container_width=True)
