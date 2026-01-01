@@ -157,7 +157,7 @@ with st.container(border=True):
     selected_eGridRegions = st.multiselect(
         'Which eGrid regions would you like to view?',
         eGridRegions,
-        ['DEU', 'FRA', 'GBR', 'BRA', 'MEX', 'JPN'])
+        ['AZNM', 'CAMX', 'ERCT', 'FRCC', 'MROE', 'MROW', 'NEWE'])  # Default selections
 
 ''
 ''
