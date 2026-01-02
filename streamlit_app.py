@@ -196,11 +196,11 @@ st.header(f'Power Prices in {to_year}', divider='gray')
 tab1, tab2 = st.tabs(["Chart", "Dataframe"])
 # Create a display copy with `period` formatted as YYYY for nicer axis/labels
 display_df = filtered_power_df.copy()
-display_df['period'] = pd.to_datetime(display_df['period'], errors='coerce').dt.year.astype('Int64').astype(str)
 
-tab1.line_chart(display_df,
+
+tab1.line_chart(filtered_power_df,
     x='period',
     y='Average Value',
     color='eGRID Subregion(s)',
     height=250)
-tab2.dataframe(display_df, height=250, use_container_width=True)
+tab2.dataframe(filtered_power_df, height=250, use_container_width=True)
