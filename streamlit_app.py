@@ -176,19 +176,23 @@ st.header('Power Price Projections', divider='gray')
 
 ''
 
-st.line_chart(
-        filtered_power_df,
-        x='period',
-        y='Average Value',
-        color='eGRID Subregion(s)',
+#st.line_chart(
+ #      filtered_power_df,
+ #      x='period',
+ #      y='Average Value',
+ #      color='eGRID Subregion(s)',
     )
 
 ''
 ''
 
 
-#st.header(f'Power Prices in {to_year}', divider='gray')
+st.header(f'Power Prices in {to_year}', divider='gray')
 
-#tab1, tab2 = st.tabs(["Chart", "Dataframe"])
-#tab1.line_chart(filtered_power_df, height=250)
+tab1, tab2 = st.tabs(["Chart", "Dataframe"])
+tab1.line_chart(filtered_power_df,         
+        x='period',
+        y='Average Value',
+        color='eGRID Subregion(s)',
+        height=250)
 #tab2.dataframe(filtered_power_df, height=250, use_container_width=True)
