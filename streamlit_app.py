@@ -181,7 +181,7 @@ st.header('Power Price Projections', divider='gray')
  #      x='period',
  #      y='Average Value',
  #      color='eGRID Subregion(s)',
-    )
+ #   )
 
 ''
 ''
