@@ -195,4 +195,4 @@ tab1.line_chart(filtered_power_df,
         y='Average Value',
         color='eGRID Subregion(s)',
         height=250)
-#tab2.dataframe(filtered_power_df, height=250, use_container_width=True)
+tab2.dataframe(filtered_power_df, height=250, use_container_width=True)
