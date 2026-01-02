@@ -120,7 +120,11 @@ SRVC,SRCA,SERC Reliability Corporation / South,5-16,serccnt
 
 power_df = get_power_data()
 #update formats 
-power_df['period'] = pd.to_datetime(power_df['period']).dt.year
+power_df["period"] = (
+    pd.to_datetime(power_df["period"], errors="coerce")
+    .dt.year
+    .astype("Int64")   # nullable integer (recommended)
+)
 #st.dataframe(power_df)
 # -----------------------------------------------------------------------------
 # Draw the actual page
