@@ -149,8 +149,6 @@ with st.container(border=True):
         max_value=max_value,
         value=[min_value, max_value])
 
-
-
     if not len(eGridRegions):
         st.warning("Select at least one eGridRegion")
 
@@ -162,6 +160,10 @@ with st.container(border=True):
 ''
 ''
 ''
+
+
+first_year = power_df[power_df['period'] == from_year]
+last_year = power_df[power_df['period'] == to_year]
 
 # Filter the data
 filtered_power_df = power_df[
@@ -185,11 +187,8 @@ st.line_chart(
 ''
 
 
-first_year = power_df[power_df['period'] == from_year]
-last_year = power_df[power_df['period'] == to_year]
+#st.header(f'Power Prices in {to_year}', divider='gray')
 
-st.header(f'Power Prices in {to_year}', divider='gray')
-
-tab1, tab2 = st.tabs(["Chart", "Dataframe"])
-tab1.line_chart(filtered_power_df, height=250)
-tab2.dataframe(filtered_power_df, height=250, use_container_width=True)
+#tab1, tab2 = st.tabs(["Chart", "Dataframe"])
+#tab1.line_chart(filtered_power_df, height=250)
+#tab2.dataframe(filtered_power_df, height=250, use_container_width=True)
